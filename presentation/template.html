@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Интел Групп · doma-karkas.ru — Презентация компании и проектов</title>
+<style id="fonts">/*__FONTS_CSS__*/</style>
+<style>
+:root{
+  --green-950:#0E2A20; --green-900:#123529; --green-850:#163d2f; --green-800:#194438;
+  --green:#1E5B45; --green-600:#2A6E54; --green-500:#3C8467;
+  --gold:#C79A3E; --gold-2:#D9B463; --gold-soft:#EBD59A;
+  --cream:#FAF6EC; --paper:#FCFAF3; --card:#FFFFFF;
+  --ink:#16211C; --body:#3C4842; --muted:#6E786F;
+  --line:#E7DFCE; --line-strong:#D9CFB8;
+  --line-dark:rgba(255,255,255,.14); --dim:rgba(255,255,255,.72); --dim-2:rgba(255,255,255,.55);
+  --font-head:'Montserrat','Liberation Sans',sans-serif;
+  --font-body:'Inter','Liberation Sans',sans-serif;
+  --shadow:0 18px 40px -22px rgba(18,53,41,.35);
+  --shadow-lg:0 30px 60px -28px rgba(14,42,32,.55);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{font-family:var(--font-body);color:var(--ink);background:#0b241b;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+h1,h2,h3,h4{font-family:var(--font-head);font-weight:700;line-height:1.08;letter-spacing:-.01em}
+p{line-height:1.55}
+
+/* ---------- Deck / stage ---------- */
+.stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(120% 120% at 50% 0%,#12352a 0%,#0b241b 70%)}
+#deck{position:relative;width:1280px;height:720px;flex:none}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;overflow:hidden;opacity:0;visibility:hidden;transition:opacity .45s ease}
+.slide.active{opacity:1;visibility:visible}
+
+/* light vs dark surfaces */
+.slide.light{background:var(--cream);color:var(--ink)}
+.slide.dark{background:var(--green-950);color:#fff}
+.slide.dark .muted{color:var(--dim-2)}
+
+/* frame padding */
+.pad{padding:58px 72px}
+.slide-body{flex:1;display:flex;flex-direction:column;min-height:0}
+
+/* ---------- shared bits ---------- */
+.eyebrow{font-family:var(--font-head);font-weight:700;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--green-600);display:inline-flex;align-items:center;gap:10px}
+.slide.dark .eyebrow{color:var(--gold-2)}
+.eyebrow::before{content:"";width:26px;height:2px;background:currentColor;display:inline-block;border-radius:2px;opacity:.9}
+.h-title{font-size:40px;line-height:1.06;color:var(--ink);margin-top:16px}
+.slide.dark .h-title{color:#fff}
+.h-title .accent{color:var(--gold)}
+.slide.dark .h-title .accent{color:var(--gold-2)}
+.lead{font-size:18px;color:var(--body);line-height:1.6}
+.slide.dark .lead{color:var(--dim)}
+.muted{color:var(--muted)}
+
+/* topbar / footer */
+.brandbar{display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:12px}
+.brand .mark{width:40px;height:40px;flex:none}
+.brand .wm{font-family:var(--font-head);font-weight:800;letter-spacing:.02em;font-size:16px;line-height:1}
+.brand .wm small{display:block;font-family:var(--font-body);font-weight:500;font-size:10.5px;letter-spacing:.16em;color:var(--gold-2);text-transform:uppercase;margin-top:3px}
+.slide.light .brand .wm{color:var(--ink)}
+.slide.light .brand .wm small{color:var(--green-600)}
+.foot{display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}
+.slide.dark .foot{color:var(--dim-2);border-top-color:var(--line-dark)}
+.foot .site{font-family:var(--font-head);font-weight:600;letter-spacing:.04em}
+
+/* pills / chips */
+.pills{display:flex;flex-wrap:wrap;gap:12px}
+.pill{display:inline-flex;align-items:center;gap:9px;padding:11px 18px;border-radius:999px;font-size:14.5px;font-weight:600;font-family:var(--font-head);
+  background:rgba(255,255,255,.06);border:1px solid var(--line-dark);color:#fff}
+.pill svg{width:18px;height:18px;color:var(--gold-2)}
+.chip{display:inline-flex;align-items:center;padding:9px 15px;border-radius:999px;font-size:14px;font-weight:600;
+  background:#fff;border:1px solid var(--line-strong);color:var(--green);font-family:var(--font-head)}
+.chip.g{background:var(--green);color:#fff;border-color:var(--green)}
+
+/* icons */
+.ic{width:24px;height:24px;stroke:currentColor;stroke-width:1.7;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.ic-badge{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;flex:none;
+  background:linear-gradient(135deg,#eef5f0,#e2efe7);color:var(--green);border:1px solid #dbe8e0}
+.slide.dark .ic-badge{background:rgba(199,154,62,.14);border-color:rgba(199,154,62,.32);color:var(--gold-2)}
+.ic-badge .ic{width:26px;height:26px}
+
+/* cards */
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 22px;box-shadow:var(--shadow)}
+.slide.dark .card{background:rgba(255,255,255,.045);border-color:var(--line-dark);box-shadow:none}
+.card h4{font-size:16.5px;color:var(--ink);margin-bottom:6px}
+.slide.dark .card h4{color:#fff}
+.card p{font-size:13.5px;color:var(--body)}
+.slide.dark .card p{color:var(--dim-2)}
+
+/* grids */
+.grid{display:grid;gap:18px}
+.g2{grid-template-columns:1fr 1fr}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+
+/* metrics */
+.metric .num{font-family:var(--font-head);font-weight:800;font-size:52px;line-height:1;color:var(--gold-2);letter-spacing:-.02em}
+.metric .lbl{font-size:14px;color:var(--dim);margin-top:10px;font-weight:500}
+.metric .num .u{font-size:26px;vertical-align:super;margin-left:2px;color:var(--gold)}
+
+/* ===== SLIDE 1 hero ===== */
+.hero{background:
+  radial-gradient(90% 120% at 85% 10%,rgba(199,154,62,.16),transparent 55%),
+  radial-gradient(80% 90% at 10% 95%,rgba(60,132,103,.28),transparent 60%),
+  var(--green-950)}
+.hero .bgline{position:absolute;inset:0;opacity:.5;pointer-events:none}
+.hero-center{flex:1;display:flex;flex-direction:column;justify-content:center;position:relative;z-index:2}
+.hero h1{font-size:62px;line-height:1.02;font-weight:800;letter-spacing:-.02em;margin:22px 0 20px}
+.hero h1 .accent{color:var(--gold-2)}
+.hero .sub{font-size:20px;color:var(--dim);max-width:830px;line-height:1.55;margin-bottom:34px}
+
+/* section step timeline */
+.timeline{display:grid;grid-template-columns:repeat(6,1fr);gap:0;margin-top:8px;position:relative}
+.timeline::before{content:"";position:absolute;left:6%;right:6%;top:26px;height:2px;background:var(--line-strong)}
+.tl{position:relative;text-align:center;padding:0 10px}
+.tl .dot{width:54px;height:54px;border-radius:50%;background:#fff;border:2px solid var(--green);color:var(--green);
+  display:flex;align-items:center;justify-content:center;margin:0 auto 16px;position:relative;z-index:2;font-family:var(--font-head);font-weight:800;font-size:20px}
+.tl:nth-child(even) .dot{border-color:var(--gold);color:var(--gold)}
+.tl h4{font-size:14.5px;margin-bottom:5px;color:var(--ink)}
+.tl p{font-size:12px;color:var(--muted);line-height:1.4}
+
+/* list rows */
+.rows{display:flex;flex-direction:column;gap:14px}
+.row{display:flex;gap:16px;align-items:flex-start}
+.row .ic-badge{width:44px;height:44px}
+.row .ic-badge .ic{width:22px;height:22px}
+.row h4{font-size:16px;margin-bottom:3px}
+.row p{font-size:13.5px;color:var(--body)}
+.slide.dark .row p{color:var(--dim-2)}
+
+/* project card */
+.proj{display:flex;flex-direction:column;justify-content:space-between;min-height:184px;position:relative;overflow:hidden}
+.proj .roof{position:absolute;right:-10px;top:-10px;width:74px;height:74px;color:var(--green-500);opacity:.16}
+.proj .pname{font-family:var(--font-head);font-weight:800;font-size:21px;color:var(--ink)}
+.proj .parea{font-size:13.5px;color:var(--muted);margin-top:4px;display:flex;align-items:center;gap:7px}
+.proj .pprice{font-family:var(--font-head);font-weight:800;font-size:24px;color:var(--green);margin-top:14px}
+.proj .ptag{font-size:12px;color:var(--gold);font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-top:4px}
+
+/* two-col split */
+.split{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;flex:1;align-items:center}
+.factlist{display:flex;flex-direction:column;gap:14px}
+.factline{display:flex;align-items:center;gap:14px;padding:15px 18px;background:#fff;border:1px solid var(--line);border-radius:13px}
+.slide.dark .factline{background:rgba(255,255,255,.05);border-color:var(--line-dark)}
+.factline .k{font-family:var(--font-head);font-weight:800;font-size:22px;color:var(--green);min-width:104px}
+.slide.dark .factline .k{color:var(--gold-2)}
+.factline .v{font-size:14px;color:var(--body)}
+.slide.dark .factline .v{color:var(--dim)}
+
+/* callout / quote */
+.callout{margin-top:22px;padding:20px 24px;border-left:4px solid var(--gold);background:rgba(199,154,62,.08);border-radius:0 12px 12px 0;font-size:17px;line-height:1.5;color:var(--ink);font-style:italic}
+.slide.dark .callout{background:rgba(199,154,62,.1);color:#fff}
+.quote-xl{font-family:var(--font-head);font-weight:800;font-size:34px;line-height:1.15;color:#fff;text-align:center}
+.quote-xl .accent{color:var(--gold-2)}
+
+/* rating hero */
+.rate-hero{display:flex;flex-direction:column;align-items:center;justify-content:center}
+.rate-num{font-family:var(--font-head);font-weight:800;font-size:104px;line-height:.9;color:var(--gold-2)}
+.stars{color:var(--gold-2);font-size:30px;letter-spacing:6px;margin:14px 0 8px}
+.platforms{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:8px}
+.plat{background:rgba(255,255,255,.05);border:1px solid var(--line-dark);border-radius:13px;padding:16px 10px;text-align:center}
+.plat .pv{font-family:var(--font-head);font-weight:800;font-size:22px;color:#fff}
+.plat .pn{font-size:12px;color:var(--dim-2);margin-top:4px}
+.plat .pc{font-size:11.5px;color:var(--gold-2);margin-top:6px;font-weight:600}
+
+/* contacts */
+.contacts{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.contact{display:flex;gap:14px;align-items:center;background:rgba(255,255,255,.05);border:1px solid var(--line-dark);border-radius:14px;padding:18px}
+.contact .ic-badge{width:44px;height:44px}
+.contact .cl{font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-2);font-weight:700}
+.contact .cv{font-family:var(--font-head);font-weight:700;font-size:16px;color:#fff;margin-top:3px}
+
+/* chart */
+.chart-wrap{background:rgba(255,255,255,.04);border:1px solid var(--line-dark);border-radius:16px;padding:20px 22px 12px}
+.chart-cap{font-size:12px;color:var(--dim-2);margin-top:6px}
+
+/* number badge for style chips section */
+.mini{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--body);font-weight:500}
+.slide.dark .mini{color:var(--dim)}
+.mini svg{width:17px;height:17px;color:var(--green-500)}
+
+/* ---------- NAV (screen only) ---------- */
+.nav{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:16px;z-index:50;
+  background:rgba(11,36,27,.72);backdrop-filter:blur(8px);padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.12)}
+.nav button{width:38px;height:38px;border-radius:50%;border:none;background:rgba(255,255,255,.1);color:#fff;font-size:17px;cursor:pointer}
+.nav button:hover{background:var(--gold);color:#12352a}
+.nav .count{color:#fff;font-family:var(--font-head);font-weight:600;font-size:13px;min-width:52px;text-align:center}
+.progress{position:fixed;top:0;left:0;height:3px;background:var(--gold);z-index:60;transition:width .3s}
+
+/* ---------- PRINT ---------- */
+@media print{
+  @page{size:1280px 720px;margin:0}
+  html,body{background:#fff!important;width:1280px}
+  .stage{position:static;display:block;background:none;transform:none!important}
+  #deck{position:static;width:1280px;height:auto;transform:none!important}
+  .slide{position:relative!important;opacity:1!important;visibility:visible!important;
+    width:1280px!important;height:720px!important;page-break-after:always;break-after:page;transition:none}
+  .slide:last-child{page-break-after:avoid;break-after:auto}
+  .nav,.progress{display:none!important}
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+}
+</style>
+</head>
+<body>
+
+<!-- SVG icon defs -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<defs>
+<symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></symbol>
+<symbol id="i-ruble" viewBox="0 0 24 24"><path d="M8 21V4h5a4.5 4.5 0 0 1 0 9H6"/><path d="M6 17h7"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+<symbol id="i-tools" viewBox="0 0 24 24"><path d="M14.7 6.3a3.5 3.5 0 0 0 4.6 4.6L21 12l-8 8-4-4 8-8z"/><path d="M6 12l-3 3 3 3 3-3"/></symbol>
+<symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></symbol>
+<symbol id="i-leaf" viewBox="0 0 24 24"><path d="M4 20C3 12 9 4 20 4c0 11-8 17-16 16z"/><path d="M9 15c3-3 6-4 9-5"/></symbol>
+<symbol id="i-factory" viewBox="0 0 24 24"><path d="M3 21V9l6 4V9l6 4V6l6 3v12z"/><path d="M7 21v-4M12 21v-4M17 21v-4"/></symbol>
+<symbol id="i-doc" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/><path d="M9 13l2 2 3-3"/></symbol>
+<symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+<symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="8" r="4"/><path d="M11 11l9 9M17 17l2-2M15 15l2-2"/></symbol>
+<symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 3h4l2 5-3 2a11 11 0 0 0 6 6l2-3 5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z"/></symbol>
+<symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></symbol>
+<symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-6.3 7-11a7 7 0 0 0-14 0c0 4.7 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+<symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></symbol>
+<symbol id="i-percent" viewBox="0 0 24 24"><path d="M5 19L19 5"/><circle cx="7.5" cy="7.5" r="2.5"/><circle cx="16.5" cy="16.5" r="2.5"/></symbol>
+<symbol id="i-window" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M4 12h16M12 3v18"/></symbol>
+<symbol id="i-award" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M9 14l-2 7 5-3 5 3-2-7"/></symbol>
+<symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16 5.2A3.2 3.2 0 0 1 16 11M18 20c0-2.6-1-4.8-2.5-6"/></symbol>
+<symbol id="i-ruler" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="8" rx="1"/><path d="M7 8v3M11 8v4M15 8v3M19 8v4"/></symbol>
+<symbol id="i-bank" viewBox="0 0 24 24"><path d="M3 9l9-5 9 5"/><path d="M5 9v9M19 9v9M9 9v9M15 9v9M3 20h18"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M5 13l4 4 10-11"/></symbol>
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-comp" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 12l4-7-7 4z"/></symbol>
+<symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7-4.5-9-9a4.5 4.5 0 0 1 9-2 4.5 4.5 0 0 1 9 2c-2 4.5-9 9-9 9z"/></symbol>
+<symbol id="i-star" viewBox="0 0 24 24"><path d="M12 3l2.7 5.8 6.3.8-4.7 4.4 1.2 6.2L12 17.8 6.5 20.2l1.2-6.2L3 9.6l6.3-.8z"/></symbol>
+<symbol id="i-logo" viewBox="0 0 48 48"><rect x="3" y="3" width="42" height="42" rx="11" fill="#C79A3E"/><path d="M13 25l11-9 11 9" stroke="#12352a" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 24v10h16V24" stroke="#12352a" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><rect x="21.5" y="28" width="5" height="6" rx="1" fill="#12352a"/></symbol>
+</defs>
+</svg>
+
+<div class="progress" id="progress"></div>
+<div class="stage" id="stage">
+<div id="deck">
+
+<!-- =================== SLIDE 1 · HERO =================== -->
+<section class="slide dark hero active pad">
+  <svg class="bgline" viewBox="0 0 1280 720" preserveAspectRatio="none">
+    <g stroke="rgba(255,255,255,.05)" stroke-width="1" fill="none">
+      <path d="M-50 560 L360 300 L770 560"/><path d="M360 300 L360 620 M120 470 L120 620 M600 470 L600 620"/>
+      <path d="M760 600 L1010 440 L1260 600"/><path d="M1010 440 L1010 660"/>
+    </g>
+  </svg>
+  <div class="brandbar" style="position:relative;z-index:2">
+    <div class="brand"><svg class="mark"><use href="#i-logo"/></svg>
+      <div class="wm">ИНТЕЛ ГРУПП<small>Загородное домостроение</small></div></div>
+    <div class="site" style="font-family:var(--font-head);font-weight:600;color:var(--gold-2);letter-spacing:.04em">doma-karkas.ru</div>
+  </div>
+  <div class="hero-center">
+    <span class="eyebrow">Строительство домов · Москва и Московская область</span>
+    <h1>Строим тёплые дома,<br><span class="accent">в которых хочется жить</span></h1>
+    <p class="sub">Загородная недвижимость комфорт-класса под ключ — с фиксированной ценой по договору, честным контролём качества и гарантией 20&nbsp;лет на конструктив.</p>
+    <div class="pills">
+      <span class="pill"><svg class="ic"><use href="#i-clock"/></svg>Под ключ за 3 месяца</span>
+      <span class="pill"><svg class="ic"><use href="#i-ruble"/></svg>Фиксированная цена</span>
+      <span class="pill"><svg class="ic"><use href="#i-shield"/></svg>Гарантия 20 лет</span>
+      <span class="pill"><svg class="ic"><use href="#i-home"/></svg>700+ построенных домов</span>
+    </div>
+  </div>
+  <div class="foot"><span>Презентация компании и проектов</span><span class="site">2011 — 2026</span></div>
+</section>
+
+<!-- =================== SLIDE 2 · О КОМПАНИИ =================== -->
+<section class="slide light pad">
+  <div class="slide-body">
+    <span class="eyebrow">О компании</span>
+    <h2 class="h-title">Загородный дом под ключ —<br><span class="accent">без рисков и переплат</span></h2>
+    <div class="split" style="margin-top:26px">
+      <div>
+        <p class="lead">Компания <b>ООО «Интел Групп»</b> (бренд&nbsp;doma-karkas.ru) с 2011 года строит частные дома и коттеджи в Москве и Подмосковье. Мы берём на себя весь цикл — от проекта и фундамента до инженерии, отделки и сдачи под ключ — и отвечаем за результат договором с&nbsp;фиксированной ценой.</p>
+        <div class="callout">«Создаём комфортное и качественное жильё для семей — ради их жизни, здоровья и благополучия».</div>
+      </div>
+      <div class="factlist">
+        <div class="factline"><span class="k">2011</span><span class="v">год основания — более 14 лет опыта на рынке</span></div>
+        <div class="factline"><span class="k">700+</span><span class="v">домов и коттеджей построено под ключ</span></div>
+        <div class="factline"><span class="k">40+</span><span class="v">населённых пунктов Москвы и области</span></div>
+        <div class="factline"><span class="k">Своё</span><span class="v">производство деревянных конструкций</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><div class="brand"><svg class="mark" style="width:26px;height:26px"><use href="#i-logo"/></svg><span>Интел Групп</span></div><span class="site">doma-karkas.ru · 02</span></div>
+</section>
+
+<!-- =================== SLIDE 3 · ЦИФРЫ =================== -->
+<section class="slide dark pad">
+  <div class="slide-body">
+    <span class="eyebrow">Цифры, которым можно доверять</span>
+    <h2 class="h-title">14 лет опыта в каждом доме</h2>
+    <div class="grid g4" style="margin-top:44px">
+      <div class="metric card"><div class="num">700<span class="u">+</span></div><div class="lbl">домов построено<br>под ключ с 2011 года</div></div>
+      <div class="metric card"><div class="num">20<span class="u">лет</span></div><div class="lbl">гарантия<br>на конструктив</div></div>
+      <div class="metric card"><div class="num">4.9<span class="u">/5</span></div><div class="lbl">средняя оценка<br>на 5 площадках отзывов</div></div>
+      <div class="metric card"><div class="num">3<span class="u">мес</span></div><div class="lbl">тёплый дом<br>под ключ — от</div></div>
+    </div>
+    <div class="grid g3" style="margin-top:18px">
+      <div class="row"><div class="ic-badge"><svg class="ic"><use href="#i-pin"/></svg></div><div><h4>40+ городов МО</h4><p>работаем по всей Московской области</p></div></div>
+      <div class="row"><div class="ic-badge"><svg class="ic"><use href="#i-heart"/></svg></div><div><h4>Каждый 3-й — по рекомендации</h4><p>клиенты возвращаются и советуют нас</p></div></div>
+      <div class="row"><div class="ic-badge"><svg class="ic"><use href="#i-ruble"/></svg></div><div><h4>Фиксированная смета</h4><p>цена в договоре не меняется</p></div></div>
+    </div>
+  </div>
+  <div class="foot"><div class="brand"><svg class="mark" style="width:26px;height:26px"><use href="#i-logo"/></svg><span>Интел Групп</span></div><span class="site">doma-karkas.ru · 03</span></div>
+</section>
+
+<!-- =================== SLIDE 4 · ПРОБЛЕМА =================== -->
+<section class="slide light pad">
+  <div class="slide-body">
+    <span class="eyebrow">Почему стройка «на доверии» рискованна</span>
+    <h2 class="h-title">Частный дом легко превратить<br>в <span class="accent">долгострой и стресс</span></h2>
+    <div class="grid g4" style="margin-top:30px">
+      <div class="card"><div class="ic-badge" style="margin-bottom:14px"><svg class="ic"><use href="#i-ruble"/></svg></div><h4>Смета растёт</h4><p>изначальная цена «плывёт», появляются доплаты за каждую мелочь.</p></div>
+      <div class="card"><div class="ic-badge" style="margin-bottom:14px"><svg class="ic"><use href="#i-clock"/></svg></div><h4>Сроки срываются</h4><p>стройка растягивается на сезоны без понятного графика.</p></div>
+      <div class="card"><div class="ic-badge" style="margin-bottom:14px"><svg class="ic"><use href="#i-eye"/></svg></div><h4>Скрытый брак</h4><p>ошибки прячутся под отделкой и всплывают уже после заселения.</p></div>
+      <div class="card"><div class="ic-badge" style="margin-bottom:14px"><svg class="ic"><use href="#i-users"/></svg></div><h4>Бригады без ответа</h4><p>случайные исполнители исчезают, гарантии не с кого спросить.</p></div>
+    </div>
+    <div class="callout" style="margin-top:26px">Мы выстроили процесс так, чтобы убрать эти риски. Как именно — на следующих слайдах.</div>
+  </div>
+  <div class="foot"><div class="brand"><svg class="mark" style="width:26px;height:26px"><use href="#i-logo"/></svg><span>Интел Групп</span></div><span class="site">doma-karkas.ru · 04</span></div>
+</section>
+
+<!-- =================== SLIDE 5 · РЕШЕНИЕ =================== -->
+<section class="slide dark pad">
+  <div class="slide-body">
+    <span class="eyebrow">Наш подход</span>
+    <h2 class="h-title">Дом под ключ — <span class="accent">честно, прозрачно,<br>по фиксированной цене</span></h2>
+    <div class="grid g3" style="margin-top:34px">
+      <div class="card"><div class="ic-badge" style="margin-bottom:16px"><svg class="ic"><use href="#i-doc"/></svg></div><h4>Фиксированная смета</h4><p>Расчёт в день обращения. Цена закреплена договором — без скрытых доплат в процессе.</p></div>
+      <div class="card"><div class="ic-badge" style="margin-bottom:16px"><svg class="ic"><use href="#i-eye"/></svg></div><h4>Прозрачный контроль</h4><p>Многоуровневая проверка качества и еженедельные фото- и видеоотчёты с вашего объекта.</p></div>
+      <div class="card"><div class="ic-badge" style="margin-bottom:16px"><svg class="ic"><use href="#i-shield"/></svg></div><h4>Гарантия и защита</h4><p>Гарантия 20 лет, независимый технадзор в подарок и расчёты через эскроу-счёт.</p></div>
+    </div>
+    <div class="callout" style="border-left-color:var(--gold-2)">«Строим честно и открыто» — принцип, по которому мы работаем на каждом объекте.</div>
+  </div>
+  <div class="foot"><div class="brand"><svg class="mark" style="width:26px;height:26px"><use href="#i-logo"/></svg><span>Интел Групп</span></div><span class="site">doma-karkas.ru · 05</span></div>
+</section>
+
+<!-- =================== SLIDE 6 · ТЕХНОЛОГИИ =================== -->
+<section class="slide light pad">
+  <div class="slide-body">
+    <span class="eyebrow">Технологии строительства</span>
+    <h2 class="h-title">7 технологий — под ваш бюджет и задачи</h2>
+    <div class="grid g4" style="margin-top:26px;gap:16px">
+      <div class="card"><div class="ic-badge" style="margin-bottom:12px"><svg class="ic"><use href="#i-home"/></svg></div><h4>Каркасные дома</h4><p>Канадская технология, утепление стен 200 мм — тёплый дом за 3 месяца.</p></div>
+      <div class="card"><div class="ic-badge" style="margin-bottom:12px"><svg class="ic"><use href="#i-layers"/></svg></div><h4>Газобетон</h4><p>Блоки Bonolit / Ytong на клей — прочность и энергоэффективность.</p></div>
+      <div class="card"><div class="ic-badge" style="margin-bottom:12px"><svg class="ic"><use href="#i-layers"/></svg></div><h4>Керамоблок</h4><p>Тёплая керамика для долговечных «дышащих» стен.</p></div>
+      <div class="card"><div class="ic-badge" style="margin-bottom:12px"><svg class="ic"><use href="#i-tools"/></svg></div><h4>Кирпич</h4><p>Классическая кладка — капитальный дом на поколения.</p></div>
+      <div class="card"><div class="ic-badge" style="margin-bottom:12px"><svg class="ic"><use href="#i-leaf"/></svg></div><h4>Брус</h4><p>Профилированный и клееный брус с минимальной усадкой.</p></div>
+      <div class="card"><div class="ic-badge" style="margin-bottom:12px"><svg class="ic"><use href="#i-layers"/></svg></div><h4>Керамзитобетон</h4><p>Лёгкие тёплые блоки — оптимальная цена и скорость.</p></div>
+      <div class="card"><div class="ic-badge" style="margin-bottom:12px"><svg class="ic"><use href="#i-layers"/></svg></div><h4>Пеноблок</h4><p>Экономичное решение для быстрого домостроения.</p></div>
+      <div class="card" style="background:var(--green);border-color:var(--green);color:#fff;display:flex;flex-direction:column;justify-content:center"><h4 style="color:#fff">+ Индивидуально</h4><p style="color:rgba(255,255,255,.85)">Подберём технологию под ваш участок, бюджет и стиль.</p></div>
+    </div>
+  </div>
+  <div class="foot"><div class="brand"><svg class="mark" style="width:26px;height:26px"><use href="#i-logo"/></svg><span>Интел Групп</span></div><span class="site">doma-karkas.ru · 06</span></div>
+</section>
+
+<!-- =================== SLIDE 7 · СТИЛИ И ФОРМАТЫ =================== -->
+<section class="slide light pad">
+  <div class="slide-body">
+    <span class="eyebrow">Архитектура и форматы</span>
+    <h2 class="h-title">Любой стиль и площадь —<br>от компактных до просторных</h2>
+    <div class="split" style="margin-top:24px;align-items:flex-start">
+      <div>
+        <div class="mini" style="margin-bottom:14px"><svg><use href="#i-comp"/></svg><b>Архитектурные стили</b></div>
+        <div class="pills" style="gap:10px">
+          <span class="chip">Скандинавский</span><span class="chip">Барнхаус</span><span class="chip">Фахверк</span>
+          <span class="chip">Шале</span><span class="chip">Хай-тек</span><span class="chip">Финский</span>
+          <span class="chip">Английский</span><span class="chip">Немецкий</span><span class="chip">Классический</span>
+          <span class="chip">Альпийский</span><span class="chip">Кантри</span><span class="chip">Современный</span>
+        </div>
+      </div>
+      <div>
+        <div class="mini" style="margin-bottom:14px"><svg><use href="#i-ruler"/></svg><b>Этажность и площадь</b></div>
+        <div class="factlist">
+          <div class="factline"><span class="k" style="min-width:130px">Этажность</span><span class="v">1 этаж · 2 этажа · с мансардой</span></div>
+          <div class="factline"><span class="k" style="min-width:130px">Площадь</span><span class="v">до 100 · 100–150 · 150–200 · 200–300 · 300+ м²</span></div>
+        </div>
+        <div class="mini" style="margin:18px 0 12px"><svg><use href="#i-window"/></svg><b>Опции</b></div>
+        <div class="pills" style="gap:10px">
+          <span class="chip g">Терраса</span><span class="chip g">Балкон</span><span class="chip g">Гараж</span>
+          <span class="chip g">Панорамные окна</span><span class="chip g">Эркеры</span><span class="chip g">Второй свет</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><div class="brand"><svg class="mark" style="width:26px;height:26px"><use href="#i-logo"/></svg><span>Интел Групп</span></div><span class="site">doma-karkas.ru · 07</span></div>
+</section>
+
+<!-- =================== SLIDE 8 · ПРОЕКТЫ =================== -->
+<section class="slide light pad">
+  <div class="slide-body">
+    <span class="eyebrow">Примеры проектов</span>
+    <h2 class="h-title">Готовые проекты с прозрачной ценой</h2>
+    <div class="grid g4" style="margin-top:26px;gap:16px">
+      <div class="card proj"><svg class="roof ic"><use href="#i-home"/></svg><div><div class="pname">Виченца</div><div class="parea"><svg class="ic" style="width:15px;height:15px;color:var(--muted)"><use href="#i-ruler"/></svg>132,9 м²</div></div><div><div class="pprice">5 254 000 ₽</div><div class="ptag">под ключ</div></div></div>
+      <div class="card proj"><svg class="roof ic"><use href="#i-home"/></svg><div><div class="pname">Порт-Луи</div><div class="parea"><svg class="ic" style="width:15px;height:15px;color:var(--muted)"><use href="#i-ruler"/></svg>111 м²</div></div><div><div class="pprice">4 474 000 ₽</div><div class="ptag">под ключ</div></div></div>
+      <div class="card proj"><svg class="roof ic"><use href="#i-home"/></svg><div><div class="pname">Озарк</div><div class="parea"><svg class="ic" style="width:15px;height:15px;color:var(--muted)"><use href="#i-ruler"/></svg>218 м²</div></div><div><div class="pprice">7 911 000 ₽</div><div class="ptag">под ключ</div></div></div>
+      <div class="card proj"><svg class="roof ic"><use href="#i-home"/></svg><div><div class="pname">Сан-Диего</div><div class="parea"><svg class="ic" style="width:15px;height:15px;color:var(--muted)"><use href="#i-ruler"/></svg>213,8 м²</div></div><div><div class="pprice">8 804 000 ₽</div><div class="ptag">под ключ</div></div></div>
+    </div>
+    <div class="callout" style="margin-top:24px">Более 100 типовых проектов и индивидуальное проектирование. Стоимость строительства — <b>от 2,9 млн ₽</b>.</div>
+  </div>
+  <div class="foot"><div class="brand"><svg class="mark" style="width:26px;height:26px"><use href="#i-logo"/></svg><span>Интел Групп</span></div><span class="site">doma-karkas.ru · 08</span></div>
+</section>
+
+<!-- =================== SLIDE 9 · СТОИМОСТЬ =================== -->
+<section class="slide dark pad">
+  <div class="slide-body">
+    <span class="eyebrow">Стоимость и финансирование</span>
+    <h2 class="h-title">Понятная цена — и удобная оплата</h2>
+    <div class="split" style="margin-top:22px;grid-template-columns:1.35fr .65fr">
+      <div class="chart-wrap">
+        <canvas id="priceChart" width="720" height="330"></canvas>
+        <div class="chart-cap">Стоимость под ключ (млн ₽, столбцы) и цена за м² (тыс. ₽, линия) — по проектам-примерам.</div>
+      </div>
+      <div class="factlist">
+        <div class="factline"><span class="k" style="min-width:96px">2,9 млн</span><span class="v">стоимость дома под ключ — от</span></div>
+        <div class="factline"><span class="k" style="min-width:96px">15 850</span><span class="v">₽/мес — рассрочка на строительство</span></div>
+        <div class="factline"><span class="k" style="min-width:96px">от 6%</span><span class="v">семейная ипотека с господдержкой</span></div>
+        <div class="factline"><span class="k" style="min-width:96px">Эскроу</span><span class="v">расчёты через защищённый счёт</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><div class="brand"><svg class="mark" style="width:26px;height:26px"><use href="#i-logo"/></svg><span>Интел Групп</span></div><span class="site">doma-karkas.ru · 09</span></div>
+</section>
+
+<!-- =================== SLIDE 10 · ПРЕИМУЩЕСТВА =================== -->
+<section class="slide light pad">
+  <div class="slide-body">
+    <span class="eyebrow">Преимущества</span>
+    <h2 class="h-title">6 причин доверить стройку нам</h2>
+    <div class="grid g3" style="margin-top:28px">
+      <div class="card"><div class="ic-badge" style="margin-bottom:14px"><svg class="ic"><use href="#i-ruble"/></svg></div><h4>Фиксированная цена</h4><p>Стоимость закреплена договором. Никаких доплат в процессе стройки.</p></div>
+      <div class="card"><div class="ic-badge" style="margin-bottom:14px"><svg class="ic"><use href="#i-shield"/></svg></div><h4>Гарантия 20 лет</h4><p>Официальная гарантия на конструктивные элементы дома.</p></div>
+      <div class="card"><div class="ic-badge" style="margin-bottom:14px"><svg class="ic"><use href="#i-eye"/></svg></div><h4>Технадзор в подарок</h4><p>Независимый контроль качества строительства — за наш счёт.</p></div>
+      <div class="card"><div class="ic-badge" style="margin-bottom:14px"><svg class="ic"><use href="#i-doc"/></svg></div><h4>Смета за 1 день</h4><p>Полный расчёт стоимости в день обращения — бесплатно.</p></div>
+      <div class="card"><div class="ic-badge" style="margin-bottom:14px"><svg class="ic"><use href="#i-window"/></svg></div><h4>Панорамные окна</h4><p>Больше света и простора — в подарок к вашему проекту.</p></div>
+      <div class="card"><div class="ic-badge" style="margin-bottom:14px"><svg class="ic"><use href="#i-factory"/></svg></div><h4>Своё производство</h4><p>Деревянные конструкции с собственного цеха — качество и экономия.</p></div>
+    </div>
+  </div>
+  <div class="foot"><div class="brand"><svg class="mark" style="width:26px;height:26px"><use href="#i-logo"/></svg><span>Интел Групп</span></div><span class="site">doma-karkas.ru · 10</span></div>
+</section>
+
+<!-- =================== SLIDE 11 · ПРОЦЕСС =================== -->
+<section class="slide light pad">
+  <div class="slide-body">
+    <span class="eyebrow">Как мы работаем</span>
+    <h2 class="h-title">От заявки до ключей — 6 понятных шагов</h2>
+    <div class="timeline" style="margin-top:56px">
+      <div class="tl"><div class="dot">1</div><h4>Заявка</h4><p>Консультация и подбор проекта</p></div>
+      <div class="tl"><div class="dot">2</div><h4>Участок</h4><p>Осмотр и геология</p></div>
+      <div class="tl"><div class="dot">3</div><h4>Проект и смета</h4><p>Фиксированная цена</p></div>
+      <div class="tl"><div class="dot">4</div><h4>Договор</h4><p>Эскроу и финансирование</p></div>
+      <div class="tl"><div class="dot">5</div><h4>Стройка</h4><p>Фундамент, монтаж, инженерия</p></div>
+      <div class="tl"><div class="dot">6</div><h4>Ключи</h4><p>Отделка и сдача под ключ</p></div>
+    </div>
+    <div class="callout" style="margin-top:52px">Полный цикл — <b>16 этапов</b> с контролем на каждом шаге. Тёплый дом под ключ — <b>от 3 месяцев</b>.</div>
+  </div>
+  <div class="foot"><div class="brand"><svg class="mark" style="width:26px;height:26px"><use href="#i-logo"/></svg><span>Интел Групп</span></div><span class="site">doma-karkas.ru · 11</span></div>
+</section>
+
+<!-- =================== SLIDE 12 · КОНТРОЛЬ КАЧЕСТВА =================== -->
+<section class="slide dark pad">
+  <div class="slide-body">
+    <span class="eyebrow">Качество и прозрачность</span>
+    <h2 class="h-title">Вы видите <span class="accent">каждый этап</span> стройки</h2>
+    <div class="grid g2" style="margin-top:26px;gap:16px">
+      <div class="row"><div class="ic-badge"><svg class="ic"><use href="#i-eye"/></svg></div><div><h4>Многоуровневый контроль</h4><p>Три уровня проверки: бригадир → прораб → служба технадзора.</p></div></div>
+      <div class="row"><div class="ic-badge"><svg class="ic"><use href="#i-doc"/></svg></div><div><h4>Еженедельные отчёты</h4><p>Фото и видео с объекта — вы контролируете стройку удалённо.</p></div></div>
+      <div class="row"><div class="ic-badge"><svg class="ic"><use href="#i-check"/></svg></div><div><h4>Акты скрытых работ</h4><p>Каждый скрытый этап фиксируется официальным документом.</p></div></div>
+      <div class="row"><div class="ic-badge"><svg class="ic"><use href="#i-shield"/></svg></div><div><h4>Технадзор в подарок</h4><p>Независимая экспертиза качества — на нашей стороне обязательств.</p></div></div>
+    </div>
+    <div class="quote-xl" style="margin-top:38px">«Строим <span class="accent">честно и открыто</span>»</div>
+  </div>
+  <div class="foot"><div class="brand"><svg class="mark" style="width:26px;height:26px"><use href="#i-logo"/></svg><span>Интел Групп</span></div><span class="site">doma-karkas.ru · 12</span></div>
+</section>
+
+<!-- =================== SLIDE 13 · КОМАНДА =================== -->
+<section class="slide light pad">
+  <div class="slide-body">
+    <span class="eyebrow">Команда и экспертиза</span>
+    <h2 class="h-title">Специалисты со стажем 8–20 лет</h2>
+    <div class="grid g3" style="margin-top:28px">
+      <div class="card"><div class="ic-badge" style="margin-bottom:14px"><svg class="ic"><use href="#i-comp"/></svg></div><h4>Архитекторы</h4><p>Проектирование типовых и индивидуальных домов.</p></div>
+      <div class="card"><div class="ic-badge" style="margin-bottom:14px"><svg class="ic"><use href="#i-ruler"/></svg></div><h4>Конструкторы</h4><p>Расчёт узлов и несущих конструкций по нормам.</p></div>
+      <div class="card"><div class="ic-badge" style="margin-bottom:14px"><svg class="ic"><use href="#i-tools"/></svg></div><h4>Прорабы и бригады</h4><p>Проверенные российские бригады на каждом объекте.</p></div>
+      <div class="card"><div class="ic-badge" style="margin-bottom:14px"><svg class="ic"><use href="#i-eye"/></svg></div><h4>Служба технадзора</h4><p>Независимый контроль качества строительства.</p></div>
+      <div class="card"><div class="ic-badge" style="margin-bottom:14px"><svg class="ic"><use href="#i-factory"/></svg></div><h4>Собственное производство</h4><p>Цех деревянных конструкций и логистика.</p></div>
+      <div class="card"><div class="ic-badge" style="margin-bottom:14px"><svg class="ic"><use href="#i-doc"/></svg></div><h4>Юристы</h4><p>Сопровождение сделки, проверка участка, согласования.</p></div>
+    </div>
+    <div class="callout" style="margin-top:22px">Команда работает вместе с 2011 года. Репутация для нас важнее быстрой прибыли.</div>
+  </div>
+  <div class="foot"><div class="brand"><svg class="mark" style="width:26px;height:26px"><use href="#i-logo"/></svg><span>Интел Групп</span></div><span class="site">doma-karkas.ru · 13</span></div>
+</section>
+
+<!-- =================== SLIDE 14 · ГАРАНТИИ И ПАРТНЁРЫ =================== -->
+<section class="slide light pad">
+  <div class="slide-body">
+    <span class="eyebrow">Гарантии и партнёры</span>
+    <h2 class="h-title">Надёжность, подтверждённая документами</h2>
+    <div class="split" style="margin-top:24px;align-items:flex-start">
+      <div class="rows">
+        <div class="row"><div class="ic-badge"><svg class="ic"><use href="#i-shield"/></svg></div><div><h4>Гарантия 20 лет</h4><p>На конструктивные элементы дома — по договору.</p></div></div>
+        <div class="row"><div class="ic-badge"><svg class="ic"><use href="#i-ruble"/></svg></div><div><h4>Фиксированная цена</h4><p>Стоимость закреплена в договоре и не растёт.</p></div></div>
+        <div class="row"><div class="ic-badge"><svg class="ic"><use href="#i-doc"/></svg></div><div><h4>Юридическое сопровождение</h4><p>Проверка участка и согласования — бесплатно.</p></div></div>
+        <div class="row"><div class="ic-badge"><svg class="ic"><use href="#i-bank"/></svg></div><div><h4>Расчёты через эскроу</h4><p>Ваши средства защищены до сдачи работ.</p></div></div>
+      </div>
+      <div>
+        <div class="mini" style="margin-bottom:14px"><svg><use href="#i-award"/></svg><b>Сертификаты и партнёры</b></div>
+        <div class="pills" style="gap:10px">
+          <span class="chip">Bonolit</span><span class="chip">Ytong</span><span class="chip">ТехноНиколь</span>
+          <span class="chip g">Дилер TM ROYAL EUROPA</span>
+        </div>
+        <div class="mini" style="margin:20px 0 12px"><svg><use href="#i-star"/></svg><b>Признание</b></div>
+        <div class="rows">
+          <div class="row"><div class="ic-badge" style="width:40px;height:40px"><svg class="ic" style="width:20px;height:20px"><use href="#i-award"/></svg></div><div><h4 style="font-size:15px">Международные выставки</h4><p>Участник выставок деревянного домостроения.</p></div></div>
+          <div class="row"><div class="ic-badge" style="width:40px;height:40px"><svg class="ic" style="width:20px;height:20px"><use href="#i-comp"/></svg></div><div><h4 style="font-size:15px">Архитектурный салон</h4><p>Участник Российского архитектурного салона.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><div class="brand"><svg class="mark" style="width:26px;height:26px"><use href="#i-logo"/></svg><span>Интел Групп</span></div><span class="site">doma-karkas.ru · 14</span></div>
+</section>
+
+<!-- =================== SLIDE 15 · ОТЗЫВЫ =================== -->
+<section class="slide dark pad">
+  <div class="slide-body" style="justify-content:center">
+    <span class="eyebrow" style="align-self:center">Репутация</span>
+    <div class="rate-hero" style="margin-top:6px">
+      <div class="rate-num">4.9</div>
+      <div class="stars">★★★★★</div>
+      <p class="lead" style="text-align:center">Средняя оценка на 5 независимых площадках · более 110 отзывов</p>
+    </div>
+    <div class="platforms" style="margin-top:24px">
+      <div class="plat"><div class="pv">4.9</div><div class="pn">Яндекс.Карты</div><div class="pc">56 отзывов</div></div>
+      <div class="plat"><div class="pv">5.0</div><div class="pn">2ГИС</div><div class="pc">19 отзывов</div></div>
+      <div class="plat"><div class="pv">4.9</div><div class="pn">Domclick</div><div class="pc">22 отзыва</div></div>
+      <div class="plat"><div class="pv">4.9</div><div class="pn">Zoon</div><div class="pc">10 отзывов</div></div>
+      <div class="plat"><div class="pv">5.0</div><div class="pn">Flamp</div><div class="pc">5 отзывов</div></div>
+    </div>
+    <div class="callout" style="margin-top:24px;text-align:center;border-left:none;border-radius:12px;background:rgba(199,154,62,.12);align-self:center">
+      <svg class="ic" style="width:20px;height:20px;color:var(--gold-2);vertical-align:-4px;margin-right:8px"><use href="#i-heart"/></svg>Каждый третий клиент приходит к нам по рекомендации</div>
+  </div>
+  <div class="foot"><div class="brand"><svg class="mark" style="width:26px;height:26px"><use href="#i-logo"/></svg><span>Интел Групп</span></div><span class="site">doma-karkas.ru · 15</span></div>
+</section>
+
+<!-- =================== SLIDE 16 · КОНТАКТЫ / CTA =================== -->
+<section class="slide dark hero pad">
+  <svg class="bgline" viewBox="0 0 1280 720" preserveAspectRatio="none">
+    <g stroke="rgba(255,255,255,.05)" stroke-width="1" fill="none"><path d="M-50 600 L300 360 L650 600"/><path d="M300 360 L300 640"/><path d="M700 620 L1000 420 L1300 620"/><path d="M1000 420 L1000 660"/></g>
+  </svg>
+  <div class="brandbar" style="position:relative;z-index:2">
+    <div class="brand"><svg class="mark"><use href="#i-logo"/></svg><div class="wm">ИНТЕЛ ГРУПП<small>Загородное домостроение</small></div></div>
+    <div class="site" style="font-family:var(--font-head);font-weight:600;color:var(--gold-2)">doma-karkas.ru</div>
+  </div>
+  <div class="hero-center" style="justify-content:center">
+    <span class="eyebrow">Давайте построим ваш дом</span>
+    <h1 style="font-size:46px;margin:18px 0 14px">Получите смету в день обращения — <span class="accent">бесплатно</span></h1>
+    <p class="sub" style="margin-bottom:28px">Расскажите о вашем участке и пожеланиях — подберём проект, технологию и рассчитаем точную стоимость под ключ.</p>
+    <div class="contacts">
+      <div class="contact"><div class="ic-badge"><svg class="ic"><use href="#i-phone"/></svg></div><div><div class="cl">Телефон</div><div class="cv">+7 (495) 116-96-52</div></div></div>
+      <div class="contact"><div class="ic-badge"><svg class="ic"><use href="#i-phone"/></svg></div><div><div class="cl">Отдел продаж</div><div class="cv">+7 (496) 987-10-77</div></div></div>
+      <div class="contact"><div class="ic-badge"><svg class="ic"><use href="#i-mail"/></svg></div><div><div class="cl">Email</div><div class="cv">info@doma-karkas.ru</div></div></div>
+      <div class="contact"><div class="ic-badge"><svg class="ic"><use href="#i-globe"/></svg></div><div><div class="cl">Сайт</div><div class="cv">doma-karkas.ru</div></div></div>
+      <div class="contact"><div class="ic-badge"><svg class="ic"><use href="#i-clock"/></svg></div><div><div class="cl">Часы работы</div><div class="cv">9:00 — 18:00 · Пн–Сб</div></div></div>
+      <div class="contact"><div class="ic-badge"><svg class="ic"><use href="#i-pin"/></svg></div><div><div class="cl">Регион</div><div class="cv">Москва и область</div></div></div>
+    </div>
+  </div>
+  <div class="foot"><span>ООО «Интел Групп» · ИНН 7726461244 · ОГРН 1197746752323</span><span class="site">Спасибо!</span></div>
+</section>
+
+</div><!-- /#deck -->
+</div><!-- /.stage -->
+
+<div class="nav">
+  <button onclick="prevSlide()" aria-label="Назад">←</button>
+  <span class="count"><span id="cur">1</span> / <span id="tot">16</span></span>
+  <button onclick="nextSlide()" aria-label="Вперёд">→</button>
+</div>
+
+<script>/*__CHARTJS__*/</script>
+<script>
+/* ----- fit deck to viewport (screen only) ----- */
+var deck=document.getElementById('deck');
+function fit(){
+  var s=Math.min(window.innerWidth/1280, window.innerHeight/720);
+  deck.style.transform='scale('+s+')';
+}
+window.addEventListener('resize',fit); fit();
+
+/* ----- navigation ----- */
+var slides=document.querySelectorAll('.slide');
+var total=slides.length, cur=1;
+document.getElementById('tot').textContent=total;
+function show(n){
+  cur=Math.max(1,Math.min(total,n));
+  slides.forEach(function(s,i){s.classList.toggle('active',i===cur-1)});
+  document.getElementById('cur').textContent=cur;
+  document.getElementById('progress').style.width=(cur/total*100)+'%';
+}
+function nextSlide(){show(cur+1)} function prevSlide(){show(cur-1)}
+document.addEventListener('keydown',function(e){
+  if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();nextSlide()}
+  if(e.key==='ArrowLeft'){e.preventDefault();prevSlide()}
+});
+/* ?s=N shows a single slide (used for QA screenshots) */
+var _only=new URLSearchParams(location.search).get('s');
+if(_only){var nv=document.querySelector('.nav');if(nv)nv.style.display='none';}
+show(_only?parseInt(_only,10):1);
+
+/* ----- chart ----- */
+function drawCharts(){
+  if(typeof Chart==='undefined') return;
+  Chart.defaults.font.family="Inter, sans-serif";
+  var ctx=document.getElementById('priceChart');
+  if(!ctx) return;
+  var labels=['Виченца','Порт-Луи','Озарк','Сан-Диего'];
+  var price=[5.25,4.47,7.91,8.80];
+  var perM2=[39.5,40.3,36.3,41.2];
+  var valuePlugin={id:'vp',afterDatasetsDraw:function(c){
+    var a=c.getDatasetMeta(0);var cx=c.ctx;cx.save();
+    cx.font='700 13px Montserrat, sans-serif';cx.fillStyle='#EBD59A';cx.textAlign='center';
+    a.data.forEach(function(bar,i){cx.fillText(price[i].toFixed(2).replace('.',',')+' млн',bar.x,bar.y-8)});
+    cx.restore();
+  }};
+  new Chart(ctx,{
+    data:{labels:labels,datasets:[
+      {type:'bar',label:'Стоимость под ключ, млн ₽',data:price,yAxisID:'y',
+        backgroundColor:'rgba(199,154,62,.85)',borderColor:'#D9B463',borderWidth:1,borderRadius:6,barPercentage:.6,order:2},
+      {type:'line',label:'Цена за м², тыс. ₽',data:perM2,yAxisID:'y1',
+        borderColor:'#6EE7B7',backgroundColor:'#6EE7B7',borderWidth:3,tension:.35,
+        pointRadius:5,pointBackgroundColor:'#0E2A20',pointBorderColor:'#6EE7B7',pointBorderWidth:2,order:1}
+    ]},
+    options:{responsive:false,animation:false,maintainAspectRatio:false,layout:{padding:{top:24}},
+      plugins:{legend:{labels:{color:'rgba(255,255,255,.85)',boxWidth:14,font:{size:12}}}},
+      scales:{
+        y:{position:'left',beginAtZero:true,max:10,grid:{color:'rgba(255,255,255,.08)'},
+           ticks:{color:'rgba(255,255,255,.6)',callback:function(v){return v+' млн'}}},
+        y1:{position:'right',beginAtZero:true,max:50,grid:{drawOnChartArea:false},
+            ticks:{color:'#6EE7B7',callback:function(v){return v+'к'}}},
+        x:{grid:{display:false},ticks:{color:'rgba(255,255,255,.85)',font:{size:13,weight:'600'}}}
+      }
+    },
+    plugins:[valuePlugin]
+  });
+}
+if(document.readyState!=='loading') drawCharts();
+else document.addEventListener('DOMContentLoaded',drawCharts);
+</script>
+</body>
+</html>
