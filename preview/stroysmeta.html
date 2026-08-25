@@ -40,7 +40,7 @@ img{max-width:100%;display:block}
 button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
 a{color:inherit;text-decoration:none}
 input,select{font:inherit}
-:focus-visible{outline:2px solid var(--amber);outline-offset:3px;border-radius:4px}
+:focus-visible{outline:2px solid var(--amber);outline-offset:4px;border-radius:4px}
 ::selection{background:var(--amber);color:#0A0C10}
 
 /* ============================================================
@@ -124,7 +124,7 @@ input,select{font:inherit}
   border-radius:100px;font-weight:600;font-size:15px;letter-spacing:-.01em;
   transition:transform .18s var(--ease),background .2s,box-shadow .25s,border-color .2s;
   position:relative;overflow:hidden;white-space:nowrap;touch-action:manipulation}
-.btn:active{transform:scale(.972)}
+.btn:active{transform:scale(.98);transition-duration:.09s}
 .btn--primary{background:var(--amber);color:#120A00;box-shadow:0 8px 26px -8px rgba(255,154,46,.62)}
 .btn--primary:hover{background:var(--amber-2);box-shadow:0 12px 34px -8px rgba(255,154,46,.78)}
 .btn--ghost{border:1px solid var(--line-2);color:var(--text);background:rgba(255,255,255,.03)}
@@ -155,7 +155,7 @@ input,select{font:inherit}
 .badge--sky{background:var(--sky-dim);color:var(--sky);border:1px solid rgba(98,168,255,.26)}
 .badge--ghost{background:rgba(255,255,255,.05);color:var(--text-3);border:1px solid var(--line)}
 .dot{width:7px;height:7px;border-radius:50%;background:var(--mint);flex:none;position:relative}
-.dot::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:1px solid currentColor;
+.dot--live::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:1px solid currentColor;
   color:var(--mint);opacity:0;animation:ping 2.4s var(--ease) infinite}
 @keyframes ping{0%{transform:scale(.6);opacity:.85}70%,100%{transform:scale(1.75);opacity:0}}
 
@@ -166,7 +166,7 @@ input,select{font:inherit}
 .card:hover{border-color:var(--line-2)}
 
 /* — Reveal-анимации — */
-.rv{opacity:0;transform:translateY(22px);transition:opacity .72s var(--ease),transform .72s var(--ease)}
+.rv{opacity:0;transform:translateY(8px);transition:opacity .2s var(--ease),transform .2s var(--ease)}
 .rv.in{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
@@ -297,6 +297,7 @@ input,select{font:inherit}
   transform:translateY(24px) scale(.96);opacity:0;pointer-events:none;
   transition:transform .48s var(--ease-spring),opacity .4s var(--ease)}
 .live.on{transform:none;opacity:1;pointer-events:auto}
+.live.on.away{transform:translateY(24px) scale(.96);opacity:0;pointer-events:none}
 .live.pulse{animation:livePulse .7s var(--ease)}
 @keyframes livePulse{
   0%{box-shadow:0 26px 70px -24px rgba(0,0,0,.94),0 0 0 0 rgba(255,154,46,.5)}
@@ -436,11 +437,6 @@ input,select{font:inherit}
 .mock__tag{position:absolute;left:12px;bottom:11px;z-index:2;font-family:var(--f-mono);font-size:9.5px;
   letter-spacing:.11em;color:rgba(255,255,255,.86);text-transform:uppercase;
   background:rgba(0,0,0,.42);backdrop-filter:blur(6px);padding:4px 8px;border-radius:5px}
-/* линия сканирования — украшение */
-.scanline{position:absolute;left:0;right:0;height:120px;z-index:1;pointer-events:none;
-  background:linear-gradient(180deg,transparent,rgba(255,154,46,.14),transparent);
-  animation:scan 5.5s linear infinite}
-@keyframes scan{0%{top:-120px}100%{top:100%}}
 .mock__body{padding:16px 18px 18px}
 .mock__cli{display:flex;align-items:center;gap:10px;margin-bottom:14px}
 .mock__av{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--sky),#3D6FCC);
@@ -463,11 +459,9 @@ input,select{font:inherit}
 /* Плавающий тост «клиент открыл» */
 .float{position:absolute;z-index:6;display:flex;align-items:center;gap:11px;padding:11px 15px 11px 12px;
   border-radius:14px;background:rgba(20,26,36,.94);backdrop-filter:blur(16px);
-  border:1px solid var(--line-2);box-shadow:0 22px 50px -18px rgba(0,0,0,.9);
-  animation:floaty 6s ease-in-out infinite}
-@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+  border:1px solid var(--line-2);box-shadow:0 22px 50px -18px rgba(0,0,0,.9)}
 .float--a{right:-14px;top:-46px}
-.float--b{left:-26px;bottom:52px;animation-delay:-3s}
+.float--b{left:-26px;bottom:52px}
 .float b{display:block;font-size:12.5px;font-weight:600;letter-spacing:-.01em;white-space:nowrap}
 .float span{display:block;font-family:var(--f-mono);font-size:10px;color:var(--text-3);margin-top:1px;white-space:nowrap}
 .float__ic{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;flex:none}
@@ -486,17 +480,14 @@ input,select{font:inherit}
 .kpi:nth-child(3) b{color:var(--sky)}.kpi:nth-child(4) b{color:var(--text)}
 @media(max-width:760px){.kpis{grid-template-columns:repeat(2,1fr)}}
 
-/* бегущая строка */
+/* строка отличий — статичная, без автопрокрутки */
+.kpis__note{margin:12px 0 0;font-size:11.5px;color:var(--text-3);position:relative;z-index:3}
 .marq{margin-top:26px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
-  padding:13px 0;overflow:hidden;position:relative;z-index:3;
-  -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
-          mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
-.marq__t{display:flex;gap:34px;width:max-content;animation:marq 34s linear infinite}
-.marq:hover .marq__t{animation-play-state:paused}
-@keyframes marq{to{transform:translateX(-50%)}}
-.marq__i{display:inline-flex;align-items:center;gap:9px;font-family:var(--f-mono);font-size:11.5px;
-  letter-spacing:.06em;color:var(--text-3);white-space:nowrap;text-transform:uppercase}
-.marq__i svg{color:var(--amber);flex:none;opacity:.8}
+  padding:15px 0;position:relative;z-index:3}
+.marq__t{display:flex;flex-wrap:wrap;gap:10px 26px}
+.marq__i{display:inline-flex;align-items:flex-start;gap:8px;font-size:12.5px;
+  line-height:1.45;color:var(--text-2)}
+.marq__i svg{color:var(--mint);flex:none;margin-top:3px}
 
 /* ============================================================
    02 · PIPELINE
@@ -506,7 +497,8 @@ input,select{font:inherit}
 .pipe__line{position:absolute;left:9%;right:9%;top:53px;height:1px;
   background:repeating-linear-gradient(90deg,var(--line-2) 0 7px,transparent 7px 14px)}
 .pipe__spark{position:absolute;top:50px;left:9%;width:7px;height:7px;border-radius:50%;background:var(--amber);
-  box-shadow:0 0 16px 4px rgba(255,154,46,.85);animation:sparkRun 6.5s var(--ease) infinite}
+  box-shadow:0 0 16px 4px rgba(255,154,46,.85);opacity:0}
+.pipe__spark.go{animation:sparkRun 2.6s var(--ease) forwards}
 @keyframes sparkRun{0%{left:9%;opacity:0}6%{opacity:1}94%{opacity:1}100%{left:calc(91% - 7px);opacity:0}}
 .pipe__n{position:relative;background:none;display:flex;flex-direction:column;align-items:center;
   gap:11px;text-align:center;padding:0;z-index:2}
@@ -560,11 +552,13 @@ input,select{font:inherit}
   background:rgba(0,0,0,.24);position:relative;z-index:2}
 .ticker__hd{display:flex;align-items:center;gap:9px;padding:9px 14px;border-bottom:1px solid var(--line);
   font-family:var(--f-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-3)}
-.ticker__vp{height:38px;overflow:hidden;position:relative}
-.ticker__li{display:flex;align-items:center;gap:11px;height:38px;padding:0 14px;font-size:12.5px;
-  color:var(--text-2);position:absolute;left:0;right:0;transition:transform .6s var(--ease),opacity .6s}
+.ticker__vp{padding:4px 0}
+.ticker__li{display:flex;align-items:center;gap:11px;min-height:36px;padding:6px 14px;font-size:12.5px;
+  color:var(--text-2);border-bottom:1px solid var(--line)}
+.ticker__li:last-child{border-bottom:0}
 .ticker__li b{color:var(--text);font-weight:600}
 .ticker__li time{margin-left:auto;font-family:var(--f-mono);font-size:10.5px;color:var(--text-3);flex:none}
+@media(max-width:620px){.ticker__li{flex-wrap:wrap;gap:4px 11px}.ticker__li time{margin-left:0}}
 
 /* ============================================================
    03 · BENTO ВОЗМОЖНОСТИ
@@ -600,9 +594,7 @@ input,select{font:inherit}
 .btab .num{font-family:var(--f-mono);font-variant-numeric:tabular-nums;color:var(--text)}
 .btab tr.sum td{border-bottom:0;padding-top:11px;font-weight:600;color:var(--text)}
 .btab tr.sum .num{color:var(--amber-2);font-weight:700}
-.btab tr.hl{background:linear-gradient(90deg,rgba(255,154,46,.09),transparent);
-  animation:hlPulse 4.5s var(--ease) infinite}
-@keyframes hlPulse{0%,72%,100%{background-color:transparent}80%{background-color:rgba(255,154,46,.09)}}
+.btab tr.hl{background:linear-gradient(90deg,rgba(255,154,46,.09),transparent)}
 
 /* прогресс-бар цен */
 .pbar{height:7px;border-radius:4px;background:rgba(255,255,255,.09);overflow:hidden;margin:11px 0 8px}
@@ -735,7 +727,7 @@ input,select{font:inherit}
 .phone__notch{position:absolute;top:9px;left:50%;transform:translateX(-50%);width:82px;height:22px;
   border-radius:100px;background:#0E1219;z-index:5}
 .phone__flow{position:absolute;inset:0;overflow:hidden}
-.phone__inner{animation:phoneScroll 17s var(--ease) infinite}
+.phone__inner{animation:phoneScroll 12s var(--ease) infinite}
 @keyframes phoneScroll{0%,12%{transform:translateY(0)}
   30%,42%{transform:translateY(-16%)}58%,70%{transform:translateY(-38%)}
   86%,100%{transform:translateY(0)}}
@@ -749,7 +741,7 @@ input,select{font:inherit}
 
 .ph-b{padding:13px 14px;background:#fff}
 .ph-b .k{font-family:var(--f-mono);font-size:8px;letter-spacing:.14em;color:#8F4900;text-transform:uppercase}
-.ph-b h4{font-family:var(--f-head);font-size:17px;font-weight:600;letter-spacing:-.03em;
+.ph-ttl{font-family:var(--f-head);font-size:17px;font-weight:600;letter-spacing:-.03em;
   margin:5px 0 11px;color:var(--paper-ink)}
 .ph-kv{display:flex;gap:9px;margin-bottom:12px}
 .ph-kv div{flex:1;border:1px solid var(--paper-3);border-radius:9px;padding:8px 9px;background:var(--paper)}
@@ -808,14 +800,15 @@ input,select{font:inherit}
 /* цитата */
 .quote{margin-top:22px;padding:20px 22px;border-radius:var(--r-m);border-left:3px solid #8F4900;
   background:rgba(255,255,255,.55);position:relative}
-.quote p{margin:0 0 13px;font-size:15px;line-height:1.6;color:var(--paper-ink);font-weight:450}
-.quote__a{display:flex;align-items:center;gap:11px}
-.quote__av{width:38px;height:38px;border-radius:11px;background:var(--paper-ink);color:var(--paper);
-  display:grid;place-items:center;font-size:12.5px;font-weight:700;flex:none}
-.quote__a b{display:block;font-size:13px;color:var(--paper-ink)}
-.quote__a span{display:block;font-size:11.5px;color:var(--paper-ink-2)}
-.quote::before{content:'\201C';position:absolute;right:16px;top:2px;font-family:var(--f-head);
-  font-size:64px;color:rgba(20,23,28,.07);line-height:1}
+.quote__k{font-family:var(--f-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--paper-ink-2);margin-bottom:13px}
+.quote__ba{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:620px){.quote__ba{grid-template-columns:1fr;gap:14px}}
+.quote__col span{display:block;font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--paper-ink-2);margin-bottom:6px}
+.quote__col p{margin:0;font-size:13.5px;line-height:1.55;color:var(--paper-ink-2)}
+.quote__col--now span{color:#2E8C61}
+.quote__col--now p{color:var(--paper-ink);font-weight:450}
 
 /* ============================================================
    06 · AI И АВТОМАТИЗАЦИЯ
@@ -877,10 +870,8 @@ input,select{font:inherit}
   font-size:12px;font-weight:700;border:2px solid var(--ink-2);margin-left:-9px;color:#fff}
 .crm__st i:first-child{margin-left:0}
 .crm b{font-size:12.5px;color:var(--text-2);font-weight:500}
-/* искра-украшение */
-.spark{position:absolute;pointer-events:none;color:var(--amber);opacity:.55;
-  animation:sparkle 3.4s var(--ease) infinite}
-@keyframes sparkle{0%,100%{opacity:.2;transform:scale(.82) rotate(0)}50%{opacity:.75;transform:scale(1.1) rotate(22deg)}}
+/* искра-украшение (статичная) */
+.spark{position:absolute;pointer-events:none;color:var(--amber);opacity:.4}
 
 /* ============================================================
    07 · КАК РАБОТАЕТ (светлая)
@@ -905,8 +896,8 @@ input,select{font:inherit}
 .st.on .st__n{border-style:solid;border-color:#8F4900;color:#8F4900;background:#fff;
   box-shadow:0 0 0 8px rgba(143,73,0,.08),0 14px 30px -14px rgba(143,73,0,.5);transform:scale(1.06)}
 .st.on .st__n::after{content:'';position:absolute;inset:-2px;border-radius:50%;
-  border:1.5px solid rgba(143,73,0,.28);animation:ping 2.6s var(--ease) infinite}
-.st h4{font-family:var(--f-head);font-size:17px;font-weight:600;letter-spacing:-.024em;
+  border:1.5px solid rgba(143,73,0,.28)}
+.st h3{font-family:var(--f-head);font-size:17px;font-weight:600;letter-spacing:-.024em;
   margin:0 0 8px;color:var(--paper-ink);line-height:1.2}
 .st p{margin:0 0 12px;font-size:13.5px;color:var(--paper-ink-2);line-height:1.55}
 .st__tag{display:inline-flex;align-items:center;gap:6px;font-family:var(--f-mono);font-size:10px;
@@ -1062,8 +1053,7 @@ input,select{font:inherit}
 
 /* форма */
 .form{border-radius:var(--r-xl);border:1px solid var(--line-2);padding:26px;position:relative;
-  background:linear-gradient(180deg,rgba(26,33,48,.94),rgba(16,21,30,.96));
-  backdrop-filter:blur(16px);box-shadow:0 40px 90px -34px rgba(0,0,0,.95)}
+  background:#161C27;box-shadow:0 40px 90px -34px rgba(0,0,0,.95)}
 .form__hd{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
 .form__hd b{font-family:var(--f-head);font-size:18px;font-weight:500;letter-spacing:-.024em}
 /* конфигурация из живой сметы */
@@ -1077,15 +1067,31 @@ input,select{font:inherit}
   margin-top:9px;padding-top:10px;border-top:1px solid var(--amber-line)}
 .form__cfg-t span{font-size:12.5px;color:var(--text-2)}
 .form__cfg-t b{font-family:var(--f-head);font-size:20px;font-weight:600;color:var(--amber-2);letter-spacing:-.03em}
+.cfg-out{margin-top:10px;border-top:1px solid var(--amber-line);padding-top:9px}
+.cfg-out summary{font-size:12px;color:var(--text-2);cursor:pointer;list-style:none;
+  display:flex;align-items:center;gap:7px;min-height:32px}
+.cfg-out summary::-webkit-details-marker{display:none}
+.cfg-out summary::before{content:'+';font-family:var(--f-mono);color:var(--amber);font-size:13px}
+.cfg-out[open] summary::before{content:'–'}
+.cfg-out summary:hover{color:var(--text)}
+.cfg-out p{margin:8px 0 2px;font-size:11.5px;line-height:1.55;color:var(--text-3)}
+.cfg-out p b{color:var(--text-2)}
 .fld{margin-bottom:13px}
 .fld label{display:block;font-size:12.5px;font-weight:500;color:var(--text-2);margin-bottom:6px}
-.fld label i{color:var(--amber);font-style:normal}
+.req{font-style:normal;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--text-3);border:1px solid var(--line-2);
+  border-radius:4px;padding:1px 5px;margin-left:5px;vertical-align:1px}
+.fld__alt{float:right;font-size:12px;color:var(--sky);text-decoration:underline;
+  text-underline-offset:2px;padding:0;min-height:0}
+.fld__alt:hover{color:#8DC2FF}
+.fld__hint{margin:7px 0 0;font-size:11.5px;line-height:1.45;color:var(--text-3)}
 .fld input{width:100%;min-height:50px;padding:0 15px;border-radius:12px;
-  border:1px solid var(--line-2);background:rgba(0,0,0,.3);color:var(--text);font-size:15px;
+  border:1px solid #647082;background:#0E131C;color:var(--text);font-size:16px;
   transition:.22s var(--ease)}
 .fld input::placeholder{color:var(--text-3)}
-.fld input:focus{outline:none;border-color:var(--amber);background:rgba(0,0,0,.42);
-  box-shadow:0 0 0 3px rgba(255,154,46,.14)}
+.fld input:hover{border-color:#8792A5}
+.fld input:focus{outline:none;border-color:var(--amber);background:#0B1017;
+  box-shadow:0 0 0 3px rgba(255,154,46,.2)}
 .fld input[aria-invalid="true"]{border-color:var(--rose);box-shadow:0 0 0 3px rgba(255,107,107,.13)}
 .fld__err{display:none;font-size:12px;color:var(--rose);margin-top:6px;align-items:center;gap:6px}
 .fld__err.on{display:flex}
@@ -1240,9 +1246,9 @@ input,select{font:inherit}
 <!-- ===================== ЖИВАЯ СМЕТА (фирменная плюшка) ===================== -->
 <aside class="live" id="live" aria-live="polite">
   <button class="live__hd" id="liveTog" aria-expanded="true">
-    <span class="dot" aria-hidden="true"></span>
+    <span class="dot dot--live" aria-hidden="true"></span>
     <span class="live__ttl">
-      <b>Ваша смета собирается</b>
+      <b id="liveHd">Предварительный расчёт</b>
       <span id="liveStat">шаг 1 из 5 · площадь</span>
     </span>
     <span class="live__mini" id="liveMini">0 ₽</span>
@@ -1252,9 +1258,7 @@ input,select{font:inherit}
   </button>
   <div class="live__body">
     <div class="live__steps" id="liveSteps" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
-    <div class="live__rows" id="liveRows">
-      <div class="live__empty"><b>Пусто</b>Двигайте ползунки и выбирайте варианты по ходу страницы — смета соберётся сама.</div>
-    </div>
+    <div class="live__rows" id="liveRows"></div>
     <div class="live__tot">
       <div>
         <span>Стоимость дома</span>
@@ -1336,7 +1340,6 @@ input,select{font:inherit}
           </div>
 
           <div class="mock__img viz-wrap">
-            <span class="scanline" aria-hidden="true"></span>
 <svg class="viz" viewBox="64 52 512 288" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
 <defs>
 <linearGradient id="e57436s" x1="0" y1="0" x2="0" y2="1">
@@ -1425,7 +1428,7 @@ input,select{font:inherit}
           <div><b>Клиент открыл смету</b><span>18 минут назад · смотрит 6 мин</span></div>
         </div>
         <div class="float float--b">
-          <span class="float__ic" style="background:rgba(255,154,46,.14);color:#FF9A2E" aria-hidden="true">
+          <span class="float__ic" style="background:rgba(53,224,161,.14);color:#35E0A1" aria-hidden="true">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2v20M17.5 6.5H9.8a3.3 3.3 0 0 0 0 6.6h4.4a3.3 3.3 0 0 1 0 6.6H6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
           </span>
           <div><b>Маржа 18,4%</b><span>пересчитана автоматически</span></div>
@@ -1433,16 +1436,17 @@ input,select{font:inherit}
       </div>
     </div>
 
-    <!-- KPI -->
+    <!-- что внутри платформы -->
     <div class="kpis rv">
-      <div class="kpi"><b><span data-count="6" data-suffix=" ч">0</span></b><span>экономия на одной смете вместо Excel</span></div>
-      <div class="kpi"><b><span data-count="2.4" data-suffix="×" data-dec="1">0</span></b><span>чаще клиент открывает ссылку, чем PDF</span></div>
-      <div class="kpi"><b><span data-count="248" data-suffix="">0</span></b><span>позиций в своей базе расценок</span></div>
-      <div class="kpi"><b><span data-count="12" data-suffix=" мин">0</span></b><span>от расценок до готового предложения</span></div>
+      <div class="kpi"><b><span data-count="5" data-suffix="">0</span></b><span>шагов от своих расценок до ссылки клиенту</span></div>
+      <div class="kpi"><b><span data-count="248" data-suffix="">0</span></b><span>позиций в базе расценок демо-компании</span></div>
+      <div class="kpi"><b><span data-count="3" data-suffix="">0</span></b><span>варианта комплектации из одних и тех же узлов</span></div>
+      <div class="kpi"><b>0 ₽</b><span>стартовый тариф, без карты и без срока</span></div>
     </div>
+    <p class="kpis__note rv">Цифры на странице — сценарий демо-компании «СтройКрафт», а не замеры по реальным клиентам.</p>
 
-    <!-- бегущая строка -->
-    <div class="marq" aria-hidden="true">
+    <!-- чем отличается от Excel и PDF -->
+    <div class="marq">
       <div class="marq__t" id="marqT"></div>
     </div>
   </div>
@@ -1592,7 +1596,7 @@ input,select{font:inherit}
 
       <!-- тикер живых событий -->
       <div class="ticker">
-        <div class="ticker__hd"><span class="dot" aria-hidden="true"></span> События по объектам · демо-поток</div>
+        <div class="ticker__hd">Так выглядит лента событий внутри платформы · пример</div>
         <div class="ticker__vp" id="ticker"></div>
       </div>
     </div>
@@ -2241,7 +2245,7 @@ input,select{font:inherit}
                 </div>
                 <div class="ph-b">
                   <div class="k">Для Анны и Михаила</div>
-                  <h4>Дом в Истре</h4>
+                  <div class="ph-ttl">Дом в Истре</div>
                   <div class="ph-kv">
                     <div><span>Стоимость</span><b id="phPrice">11,93 млн</b></div>
                     <div><span>Срок</span><b>126 дней</b></div>
@@ -2306,13 +2310,19 @@ input,select{font:inherit}
           <div class="evt__l"><b>Принял предложение</b> — сделка в amoCRM <time>19:27</time></div>
         </div>
 
-        <blockquote class="quote rv">
-          <p>Раньше отправляли PDF на 14 страниц и ждали неделю. Теперь клиент открывает ссылку в тот же вечер, и мы видим, что он смотрел. Разговор начинается с вопроса по смете, а не с «мы ещё думаем».</p>
-          <div class="quote__a">
-            <span class="quote__av" aria-hidden="true">ДК</span>
-            <div><b>Дмитрий К.</b><span>руководитель отдела продаж, каменное ИЖС</span></div>
+        <div class="quote rv">
+          <div class="quote__k">Что меняется в разговоре с клиентом</div>
+          <div class="quote__ba">
+            <div class="quote__col">
+              <span>Было</span>
+              <p>PDF на 14 страниц в мессенджер. Неделя тишины. Разговор начинается с «мы ещё думаем».</p>
+            </div>
+            <div class="quote__col quote__col--now">
+              <span>Стало</span>
+              <p>Ссылка, открытая в тот же вечер. Видно, какой вариант смотрели дольше. Разговор начинается с вопроса по конкретной строке сметы.</p>
+            </div>
           </div>
-        </blockquote>
+        </div>
 
         <div class="rv" style="margin-top:22px">
           <a href="#final" class="btn btn--dark">
@@ -2333,7 +2343,7 @@ input,select{font:inherit}
   <div class="deco-glow deco-glow--amber" style="width:520px;height:420px;top:12%;left:-140px;opacity:.28" aria-hidden="true"></div>
   <div class="deco-glow deco-glow--mint" style="width:460px;height:380px;bottom:0;right:-120px;opacity:.24" aria-hidden="true"></div>
   <span class="spark" style="top:96px;right:14%" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="m12 3 2.1 5.6L20 10.5l-5.9 1.9L12 18l-2.1-5.6L4 10.5l5.9-1.9L12 3Z" fill="currentColor"/></svg></span>
-  <span class="spark" style="bottom:120px;left:8%;animation-delay:-1.6s" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="m12 3 2.1 5.6L20 10.5l-5.9 1.9L12 18l-2.1-5.6L4 10.5l5.9-1.9L12 3Z" fill="currentColor"/></svg></span>
+  <span class="spark" style="bottom:120px;left:8%" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="m12 3 2.1 5.6L20 10.5l-5.9 1.9L12 18l-2.1-5.6L4 10.5l5.9-1.9L12 3Z" fill="currentColor"/></svg></span>
   <span class="tick-cross" style="top:70px;left:5%" aria-hidden="true"></span>
 
   <div class="wrap">
@@ -2452,31 +2462,31 @@ input,select{font:inherit}
       <div class="steps__row">
         <article class="st rv" data-step="0">
           <div class="st__n">01</div>
-          <h4>Заведите свои цены</h4>
+          <h3>Заведите свои цены</h3>
           <p>Импортируйте расценки из Excel или внесите вручную. Соберите типовые узлы дома.</p>
           <span class="st__tag">Разово · <b>~2 часа</b></span>
         </article>
         <article class="st rv" data-step="1">
           <div class="st__n">02</div>
-          <h4>Создайте проект</h4>
+          <h3>Создайте проект</h3>
           <p>Клиент, параметры дома, документы, фотографии и AI-визуализации в одной папке.</p>
           <span class="st__tag">На объект · <b>4 мин</b></span>
         </article>
         <article class="st rv" data-step="2">
           <div class="st__n">03</div>
-          <h4>Соберите смету</h4>
+          <h3>Соберите смету</h3>
           <p>Добавляйте расценки и узлы, меняйте объёмы, создавайте варианты комплектации.</p>
           <span class="st__tag">Из узлов · <b>8 мин</b></span>
         </article>
         <article class="st rv" data-step="3">
           <div class="st__n">04</div>
-          <h4>Отправьте ссылку</h4>
+          <h3>Отправьте ссылку</h3>
           <p>Клиент видит предложение с таблицей, рендерами, сроками и графиком платежей.</p>
           <span class="st__tag">Один клик · <b>10 сек</b></span>
         </article>
         <article class="st rv" data-step="4">
           <div class="st__n">05</div>
-          <h4>Получите сигнал</h4>
+          <h3>Получите сигнал</h3>
           <p>Система сообщит о просмотре, создаст задачу в CRM и зафиксирует ответ клиента.</p>
           <span class="st__tag">Автоматически · <b>0 мин</b></span>
         </article>
@@ -2485,7 +2495,7 @@ input,select{font:inherit}
       <div class="steps__sum rv">
         <span class="corners" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
         <b>12 минут</b>
-        <p>среднее время сборки повторной сметы из готовых узлов — вместо трёх часов в Excel и часа на вёрстку PDF.</p>
+        <p>складываются из шагов 02–04 выше: 4 минуты на проект, 8 на сборку сметы из готовых узлов. Это оценка демо-сценария, а не замер по клиентам.</p>
         <button class="btn btn--dark" data-open-form>Собрать первую смету</button>
       </div>
     </div>
@@ -2535,7 +2545,7 @@ input,select{font:inherit}
       </article>
 
       <article class="pl pl--hot rv">
-        <span class="badge badge--amber pl__rib">Популярный</span>
+        <span class="badge badge--amber pl__rib">Рекомендуем</span>
         <span class="corners" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
         <div class="pl__k">Стандартный</div>
         <h3 class="pl__nm">Для небольшой компании</h3>
@@ -2732,7 +2742,7 @@ input,select{font:inherit}
         <form id="leadForm" novalidate>
           <div class="form__hd">
             <b>Забрать смету</b>
-            <span class="badge badge--amber" id="formSteps">5 из 5 шагов</span>
+            <span class="badge badge--ghost" id="formSteps">5 из 5 шагов</span>
           </div>
 
           <div class="form__cfg">
@@ -2742,11 +2752,19 @@ input,select{font:inherit}
                       style="font-size:10.5px;color:var(--text-3);text-decoration:underline;text-underline-offset:2px">сбросить</button>
             </div>
             <div id="cfgRows"></div>
-            <div class="form__cfg-t"><span>Итого по смете</span><b id="cfgTot">0 ₽</b></div>
+            <div class="form__cfg-t"><span>Стоимость дома</span><b id="cfgTot">0 ₽</b></div>
+            <div class="form__cfg-r" id="cfgPlan" style="padding-top:8px"></div>
+            <details class="cfg-out">
+              <summary>Что не входит в эту сумму</summary>
+              <p>Участок, подключение электричества, скважина и септик, забор и благоустройство,
+                 мебель и техника. В Подмосковье это ещё <b>1,2–2,6 млн ₽</b> в зависимости от
+                 удалённости и готовности коммуникаций. Цифры демо-сценария — в рабочей версии
+                 считаются по вашим расценкам.</p>
+            </details>
           </div>
 
           <div class="fld">
-            <label for="fName">Как к вам обращаться <i>*</i></label>
+            <label for="fName">Как к вам обращаться <em class="req">обязательно</em></label>
             <input type="text" id="fName" name="name" placeholder="Имя" autocomplete="given-name" required>
             <div class="fld__err" id="errName">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v6M12 16.5v.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
@@ -2755,11 +2773,16 @@ input,select{font:inherit}
           </div>
 
           <div class="fld">
-            <label for="fPhone">Телефон или почта <i>*</i></label>
-            <input type="tel" id="fPhone" name="contact" placeholder="+7 999 000-00-00" autocomplete="tel" inputmode="tel" required>
+            <label for="fPhone">
+              <span id="contactLbl">Телефон</span> <em class="req">обязательно</em>
+              <button type="button" class="fld__alt" id="contactSwap">или почта</button>
+            </label>
+            <input type="tel" id="fPhone" name="contact" placeholder="+7 999 000-00-00"
+                   autocomplete="tel" inputmode="tel" required>
+            <p class="fld__hint" id="contactHint">Нужен, чтобы согласовать удобное время. Не звоним без предупреждения и не передаём контакты третьим лицам.</p>
             <div class="fld__err" id="errPhone">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v6M12 16.5v.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
-              <span>Нужен телефон от 10 цифр или адрес почты</span>
+              <span id="errPhoneTx">Введите номер целиком — от 10 цифр</span>
             </div>
           </div>
 
@@ -2767,11 +2790,10 @@ input,select{font:inherit}
             Получить смету и демо-доступ
           </button>
 
-          <p class="form__note">Отправляя форму, вы соглашаетесь с <a href="#faq">политикой обработки данных</a>. Это демо-концепт: заявка никуда не уходит.</p>
+          <p class="form__note">Займёт меньше минуты. Отправляя форму, вы соглашаетесь с <a href="#faq">политикой обработки данных</a>. Это демо-концепт: заявка никуда не уходит.</p>
 
           <div class="form__tr">
-            <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Не звоним без предупреждения</span>
-            <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Не передаём контакты третьим лицам</span>
+            <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Отвечаем в течение рабочего дня</span>
           </div>
         </form>
 
@@ -2898,7 +2920,8 @@ const PLANS = [
 const planFor = s => PLANS.find(p => s <= p.max);
 
 const S = {area:154, tech:'gas', renders:true, pkg:'comfort', seats:5};
-const touched = new Set();
+const touched = new Set(['area']);   // площадь предзаполнена — шаг фактически выполнен
+let userActed = false;
 let shown = false, prevTotal = 0, pinned = false, peekT = null;
 
 function calc(){
@@ -2930,46 +2953,39 @@ function renderLive(){
   if (c.rend)         rows.push(['Пакет AI-рендеров, 6 ракурсов', '+' + rub(c.rend)]);
   rows.push(['Платформа · ' + c.plan.name, c.plan.price ? rub(c.plan.price) + '/мес' : '0' + NB + '₽']);
 
-  if (touched.size === 0){
-    liveRows.innerHTML = '<div class="live__empty"><b>Пусто</b>Двигайте ползунки и выбирайте варианты по ходу страницы — смета соберётся сама.</div>';
-  } else {
-    liveRows.innerHTML = rows.map((r,i) => rowHTML(r[0], r[1], i >= lastRowCount)).join('');
-    lastRowCount = rows.length;
-  }
+  liveRows.innerHTML = rows.map((r,i) => rowHTML(r[0], r[1], i >= lastRowCount)).join('');
+  lastRowCount = rows.length;
 
-  // счётчик итога
-  if (touched.size === 0){
-    liveTot.textContent = '—';
-    liveSub.textContent = 'ещё не считали';
-    prevTotal = 0;
-  } else {
-    animateNum(liveTot, prevTotal, c.total);
-    prevTotal = c.total;
-    liveSub.textContent = fmt(c.total / S.area) + NB + '₽/м²';
-  }
-  $('#liveMini').textContent = touched.size ? rub(c.total) : '—';
+  animateNum(liveTot, prevTotal, c.total);
+  prevTotal = c.total;
+  liveSub.textContent = fmt(c.total / S.area) + NB + '₽/м²';
+  $('#liveMini').textContent = rub(c.total);
 
   // шаги
   liveSteps.forEach((el,i) => el.classList.toggle('done', i < touched.size));
   const done = touched.size;
   liveStat.textContent = done >= 5
     ? 'смета собрана · 5 из 5'
-    : 'шаг ' + Math.min(done+1,5) + ' из 5 · ' + STEP_LABEL[Math.min(done,4)];
+    : (userActed ? 'шаг ' : 'предварительно · шаг ') +
+      Math.min(done+1,5) + ' из 5 · ' + STEP_LABEL[Math.min(done,4)];
   $('#vnavPct').textContent = done + '/5';
 
+  $('#liveHd').textContent = userActed ? 'Ваша смета собирается' : 'Предварительный расчёт';
   syncMock(c);
   syncForm(c, rows);
 }
 
+let numRaf = null;
 function animateNum(el, from, to){
+  if (numRaf) { cancelAnimationFrame(numRaf); numRaf = null; }
   if (RM || from === to){ el.textContent = rub(to); return; }
-  const t0 = performance.now(), dur = 520;
-  (function step(t){
+  const t0 = performance.now(), dur = 380;
+  numRaf = requestAnimationFrame(function step(t){
     const k = Math.min(1, (t - t0) / dur);
     const e = 1 - Math.pow(1 - k, 3);
     el.textContent = rub(from + (to - from) * e);
-    if (k < 1) requestAnimationFrame(step);
-  })(t0);
+    numRaf = k < 1 ? requestAnimationFrame(step) : null;
+  });
 }
 
 /* — синхронизация мокапа в hero и телефона — */
@@ -3006,8 +3022,11 @@ function syncMock(c){
 /* — конфигурация в форме — */
 function syncForm(c, rows){
   const mount = $('#cfgRows'); if (!mount) return;
-  mount.innerHTML = rows.map(r =>
+  mount.innerHTML = rows.slice(0, -1).map(r =>
     '<div class="form__cfg-r"><span>'+r[0]+'</span><b>'+r[1]+'</b></div>').join('');
+  const plan = rows[rows.length - 1];
+  $('#cfgPlan').innerHTML = '<span style="color:var(--text-3)">'+plan[0]+
+    ' — отдельно от сметы</span><b>'+plan[1]+'</b>';
   $('#cfgTot').textContent = rub(c.total);
   $('#formSteps').textContent = touched.size + ' из 5 шагов';
 }
@@ -3039,6 +3058,7 @@ function peek(){
   }, 2800);
 }
 function bump(step){
+  userActed = true;
   touched.add(step);
   showLive();
   renderLive();
@@ -3197,11 +3217,11 @@ const io = new IntersectionObserver((es) => {
     const el = e.target;
     el.classList.add('in');
     // stagger внутри группы
-    $$('.rv', el).forEach((c,i) => setTimeout(() => c.classList.add('in'), i * 60));
+    $$('.rv', el).forEach((c,i) => setTimeout(() => c.classList.add('in'), i * 35));
     io.unobserve(el);
   });
 }, {threshold:.12, rootMargin:'0px 0px -8% 0px'});
-$$('.rv').forEach((el,i) => { el.style.transitionDelay = (i % 6 * 55) + 'ms'; io.observe(el); });
+$$('.rv').forEach((el,i) => { el.style.transitionDelay = (i % 4 * 40) + 'ms'; io.observe(el); });
 
 /* счётчики */
 const cio = new IntersectionObserver((es) => {
@@ -3220,6 +3240,15 @@ const cio = new IntersectionObserver((es) => {
   });
 }, {threshold:.5});
 $$('[data-count]').forEach(el => cio.observe(el));
+
+/* бегущая точка потока — один проход при появлении секции */
+(function sparkOnce(){
+  const sp = $('.pipe__spark'); if (!sp || RM) return;
+  const o = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting){ sp.classList.add('go'); o.disconnect(); }
+  }), {threshold:.4});
+  o.observe(sp.closest('.pipe'));
+})();
 
 /* прогресс-бары, донат, столбцы */
 const vio = new IntersectionObserver((es) => {
@@ -3282,50 +3311,30 @@ const PROMPTS = [
   })();
 })();
 
-/* тикер событий */
+/* пример ленты событий внутри платформы — статично, без ротации */
 const TICK = [
   ['Смета A-143 «Дом в Истре»', 'открыта клиентом', '18 мин'],
   ['Проект B-207 «Дом в Дмитрове»', 'добавлено 6 рендеров', '42 мин'],
   ['Смета C-118 «Дом в Апрелевке»', 'клиент выбрал «Комфорт»', '1 ч'],
-  ['База расценок', 'обновлено 12 позиций', '2 ч'],
   ['Смета A-143', 'предложение принято · сделка в amoCRM', '3 ч']
 ];
-(function ticker(){
+(function eventList(){
   const vp = $('#ticker'); if (!vp) return;
-  let i = 0;
-  function make(k){
-    const d = document.createElement('div');
-    d.className = 'ticker__li';
-    d.innerHTML = '<span class="dot" aria-hidden="true"></span><span><b>'+TICK[k][0]+'</b> — '+TICK[k][1]+
-                  '</span><time>'+TICK[k][2]+' назад</time>';
-    return d;
-  }
-  let cur = make(0); vp.appendChild(cur);
-  if (RM) return;
-  setInterval(() => {
-    i = (i + 1) % TICK.length;
-    const next = make(i);
-    next.style.transform = 'translateY(38px)'; next.style.opacity = '0';
-    vp.appendChild(next);
-    requestAnimationFrame(() => {
-      cur.style.transform = 'translateY(-38px)'; cur.style.opacity = '0';
-      next.style.transform = 'translateY(0)';    next.style.opacity = '1';
-    });
-    const old = cur; cur = next;
-    setTimeout(() => old.remove(), 700);
-  }, 3400);
+  vp.innerHTML = TICK.map(t =>
+    '<div class="ticker__li"><span class="dot" aria-hidden="true"></span>' +
+    '<span><b>'+t[0]+'</b> — '+t[1]+'</span><time>'+t[2]+' назад</time></div>').join('');
 })();
 
-/* бегущая строка */
-(function marquee(){
+/* строка отличий — статичная, весь список виден сразу */
+(function differences(){
   const t = $('#marqT'); if (!t) return;
-  const ITEMS = ['Свои расценки, а не чужой справочник','Узлы дома вместо ручного набора позиций',
-    'Клиентская ссылка вместо PDF на 14 страниц','Уведомление, когда клиент открыл смету',
-    'AI-рендеры внутри предложения','Маржа считается по каждому разделу',
-    'amoCRM и Битрикс24 без ручного ввода','История версий каждой сметы'];
-  const ic = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m12 3 2.1 5.6L20 10.5l-5.9 1.9L12 18l-2.1-5.6L4 10.5l5.9-1.9L12 3Z" fill="currentColor"/></svg>';
-  const html = ITEMS.map(x => '<span class="marq__i">'+ic+x+'</span>').join('');
-  t.innerHTML = html + html;
+  const ITEMS = ['Свои расценки, а не чужой справочник',
+    'Узлы дома вместо ручного набора позиций',
+    'Клиентская ссылка вместо PDF на 14 страниц',
+    'Маржа считается по каждому разделу',
+    'История версий каждой сметы'];
+  const ic = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  t.innerHTML = ITEMS.map(x => '<span class="marq__i">'+ic+x+'</span>').join('');
 })();
 
 /* аккордеон */
@@ -3392,12 +3401,40 @@ const form = $('#leadForm'), formDone = $('#formDone'), formCard = $('#formCard'
 const modal = $('#modal'), modalMount = $('#modalMount');
 let lastFocus = null;
 
+let contactMode = 'tel';
+(function contactChannel(){
+  const inp = $('#fPhone'), lbl = $('#contactLbl'), swap = $('#contactSwap'),
+        hint = $('#contactHint'), err = $('#errPhoneTx');
+  const MODES = {
+    tel:   {label:'Телефон', alt:'или почта', type:'tel',   im:'tel',   ac:'tel',
+            ph:'+7 999 000-00-00',
+            hint:'Нужен, чтобы согласовать удобное время. Не звоним без предупреждения и не передаём контакты третьим лицам.',
+            err:'Введите номер целиком — от 10 цифр'},
+    email: {label:'Почта',   alt:'или телефон', type:'email', im:'email', ac:'email',
+            ph:'name@company.ru',
+            hint:'Пришлём смету в PDF и ссылку на демо. Не передаём адрес третьим лицам, отписка в один клик.',
+            err:'Проверьте адрес — нужен формат name@company.ru'}
+  };
+  swap.addEventListener('click', () => {
+    contactMode = contactMode === 'tel' ? 'email' : 'tel';
+    const m = MODES[contactMode];
+    lbl.textContent = m.label; swap.textContent = m.alt;
+    inp.type = m.type; inp.inputMode = m.im; inp.autocomplete = m.ac; inp.placeholder = m.ph;
+    hint.textContent = m.hint; err.textContent = m.err;
+    inp.value = ''; inp.setAttribute('aria-invalid','false');
+    $('#errPhone').classList.remove('on');
+    inp.focus();
+  });
+})();
+
 function validate(){
   let ok = true;
   const name = $('#fName'), phone = $('#fPhone');
   const nameOk = name.value.trim().length >= 2;
   const v = phone.value.trim();
-  const contactOk = /^[^@\s]+@[^@\s.]+\.[^@\s]{2,}$/.test(v) || (v.replace(/\D/g,'').length >= 10);
+  const contactOk = contactMode === 'email'
+    ? /^[^@\s]+@[^@\s.]+\.[^@\s]{2,}$/.test(v)
+    : v.replace(/\D/g,'').length >= 10;
 
   name.setAttribute('aria-invalid', String(!nameOk));
   $('#errName').classList.toggle('on', !nameOk);
@@ -3450,7 +3487,7 @@ $('#againBtn').addEventListener('click', () => {
 
 $('#cfgReset').addEventListener('click', () => {
   S.area = 154; S.tech = 'gas'; S.renders = true; S.pkg = 'comfort'; S.seats = 5;
-  touched.clear(); lastRowCount = 0;
+  touched.clear(); touched.add('area'); userActed = false; lastRowCount = 0;
   areaR.value = 154; paintRange(areaR); $('#areaOut').textContent = '154';
   seatsR.value = 5;  paintRange(seatsR);
   $$('[data-tech]').forEach(x => x.setAttribute('aria-pressed', String(x.dataset.tech === 'gas')));
@@ -3529,10 +3566,18 @@ document.addEventListener('keydown', e => {
   }
 });
 
+/* у формы панель прячется: она дублирует конфигурацию и перекрывает кнопку */
+(function hideAtForm(){
+  const fin = $('#final'); if (!fin) return;
+  new IntersectionObserver(es => es.forEach(e => {
+    live.classList.toggle('away', e.isIntersecting);
+  }), {threshold:.22}).observe(fin);
+})();
+
 /* мягкое напоминание: пользователь дочитал, но ничего не тронул */
 let nudged = false;
 window.addEventListener('scroll', () => {
-  if (nudged || touched.size) return;
+  if (nudged || userActed) return;
   const h = document.documentElement.scrollHeight - window.innerHeight;
   if (h > 0 && window.scrollY / h > 0.55){
     nudged = true;
